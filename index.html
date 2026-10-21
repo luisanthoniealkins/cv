@@ -18,7 +18,9 @@
     a { color: #234e66; text-underline-offset: 4px; }
     .button { display: inline-block; padding: 10px 17px; border: 1px solid #234e66; border-radius: 6px; text-decoration: none; }
     .primary { color: white; background: #234e66; }
-    a:focus-visible { outline: 3px solid #e1a441; outline-offset: 4px; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #e1a441; outline-offset: 4px; }
+    .copy-email { padding: 0; border: 0; background: none; font: inherit; color: #234e66; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+    #copy-status { display: block; margin-top: 6px; }
     footer { margin-top: 28px; font-size: 14px; color: #50616f; }
     @media(max-width: 600px) { main { margin: 20px 12px; padding: 26px; } article { padding: 20px; } }
   </style>
@@ -35,7 +37,27 @@
         <a class="button" href="files/lead-backend-oct-2026.pdf" download>Download PDF</a>
       </div>
     </article>
-    <footer><a href="https://linkedin.com/in/luis-anthonie-alkins">LinkedIn</a> · <a href="mailto:luisanthoniealkins@gmail.com">Email</a></footer>
+    <footer><a href="https://linkedin.com/in/luis-anthonie-alkins">LinkedIn</a> · <button type="button" class="copy-email" id="copy-email" aria-label="Copy email address">Email</button><span id="copy-status" role="status" aria-live="polite"></span></footer>
   </main>
+  <script>
+    const emailButton = document.getElementById('copy-email');
+    const copyStatus = document.getElementById('copy-status');
+    let resetTimer;
+    emailButton.addEventListener('click', async () => {
+      clearTimeout(resetTimer);
+      try {
+        await navigator.clipboard.writeText('luisanthoniealkins@gmail.com');
+        emailButton.textContent = 'Copied!';
+        copyStatus.textContent = 'Email address copied to clipboard.';
+        resetTimer = setTimeout(() => {
+          emailButton.textContent = 'Email';
+          copyStatus.textContent = '';
+        }, 3000);
+      } catch {
+        emailButton.textContent = 'Email';
+        copyStatus.textContent = 'Copy manually: luisanthoniealkins@gmail.com';
+      }
+    });
+  </script>
 </body>
 </html>
